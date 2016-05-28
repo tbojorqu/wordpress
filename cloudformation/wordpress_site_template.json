@@ -222,7 +222,9 @@
           "config" : {
             "packages" : {
               "yum" : {
-                "httpd"             : []
+                "httpd"             : [],
+                "git"               : [],
+                "subversion"        : []
               }
             }
           }
@@ -232,7 +234,8 @@
         "ImageId": { "Fn::FindInMap": [ "AWSRegionArch2AMI", { "Ref": "AWS::Region" }, "64" ]},
         "InstanceType" : { "Ref" : "InstanceType" },
         "KeyName": "tbojorquez",
-        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ],
+        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} },
+          {"Key" : "Name", "Value" : "tbojorquez-wordpress"} ],
         "NetworkInterfaces" : [{
           "GroupSet"                 : [{ "Ref" : "InstanceSecurityGroup" }],
           "AssociatePublicIpAddress" : "true",
@@ -267,7 +270,11 @@
             "# Clone github repo\n",
             "cat <<'EOF' >> /root/git-setup.sh\n",
             "#!/bin/bash\n",
-            "mkdir /cookbooks\n",
+            "cd /\n",
+            "svn export https://github.com/tbojorqu/wordpress/trunk/chef/cookbooks/\n",
+            "EOF\n",
+            "chmod 755 /root/git-setup.sh\n",
+            "/root/git-setup.sh > /tmp/git-setup.log 2>&1 || error_exit 'Failed to setup git.'\n",
 
             "/opt/aws/bin/cfn-signal -e $? ",
             "         --stack ", { "Ref" : "AWS::StackName" },
