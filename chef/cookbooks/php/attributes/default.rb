@@ -51,7 +51,7 @@ when 'rhel', 'fedora'
     # default['php']['packages'] = %w(php53 php53-devel php53-cli php-pear)
     # default['php']['mysql']['package'] = 'php53-mysql'
     default['php']['packages'] = %w(php php-devel php-cli php-pear)
-    default['php']['mysql']['package'] = 'php-mysql'
+    default['php']['mysql']['package'] = 'php56-mysqlnd'
   else # set fpm attributes as we're on a modern PHP release
     default['php']['packages'] = %w(php php-devel php-cli php-pear)
     default['php']['mysql']['package'] = 'php-mysql'
