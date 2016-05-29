@@ -48,10 +48,8 @@ when 'rhel', 'fedora'
   default['php']['ext_dir']       = "/usr/#{lib_dir}/php/modules"
   default['php']['src_deps']      = %w(bzip2-devel libc-client-devel curl-devel freetype-devel gmp-devel libjpeg-devel krb5-devel libmcrypt-devel libpng-devel openssl-devel t1lib-devel mhash-devel)
   if node['platform_version'].to_f < 6
-    # default['php']['packages'] = %w(php53 php53-devel php53-cli php-pear)
-    # default['php']['mysql']['package'] = 'php53-mysql'
-    default['php']['packages'] = %w(php php-devel php-cli php-pear)
-    default['php']['mysql']['package'] = 'php56-mysqlnd'
+    default['php']['packages'] = %w(php53 php53-devel php53-cli php-pear)
+    default['php']['mysql']['package'] = 'php53-mysql'
   else # set fpm attributes as we're on a modern PHP release
     default['php']['packages'] = %w(php php-devel php-cli php-pear)
     default['php']['mysql']['package'] = 'php-mysql'
