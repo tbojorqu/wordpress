@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: build-essential
-# Attributes:: default
+# Author:: Seth Chisamore (<schisamo@opscode.com>)
+# Cookbook Name:: 7-zip
+# Recipe:: default
 #
-# Copyright 2008-2016, Chef Software, Inc.
+# Copyright 2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,5 +18,14 @@
 # limitations under the License.
 #
 
-default['build-essential']['compile_time'] = false
-default['build-essential']['msys']['path'] = "#{ENV['SYSTEMDRIVE']}\\msys"
+windows_package node['7-zip']['package_name'] do
+  source node['7-zip']['url']
+  checksum node['7-zip']['checksum']
+  options "INSTALLDIR=\"#{node['7-zip']['home']}\""
+  action :install
+end
+
+# update path
+windows_path node['7-zip']['home'] do
+  action :add
+end
