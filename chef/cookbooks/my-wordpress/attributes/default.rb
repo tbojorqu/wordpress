@@ -12,11 +12,14 @@ default['my-wordpress']['version'] = '5.5'
 default['my-wordpress']['db_password'] = 'wp_1pass'
 
 # Attributes to override
-override['wordpress']['db']['mysql_version'] = '5.6'
+override['wordpress']['db']['mysql_version'] = '5.5'
+override['wordpress']['db']['root_password'] = 'my_root_password'
+override['wordpress']['db']['instance_name'] = 'default'
+override['wordpress']['db']['name'] = "wordpressdb"
+override['wordpress']['db']['user'] = "wordpressuser"
+override['wordpress']['db']['pass'] = "wp_1pass"
+override['wordpress']['db']['prefix'] = 'wp_'
+override['wordpress']['db']['host'] = 'localhost'
+
 override['php']['packages'] = %w(php56 php56-devel php56-cli php-pear)
 override['php']['mysql']['package'] = 'php56-mysqlnd'
-
-# default['wordpress']['db']['root_password'] = 'my_root_password'
-# default['wordpress']['db']['instance_name'] = 'default'
-# default['wordpress']['db']['name'] = "wordpressdb"
-# default['wordpress']['db']['user'] = "wordpressuser"
