@@ -465,6 +465,7 @@ EOSQL
       return '5.6' if node['platform_family'] == 'fedora'
       return '5.6' if node['platform_family'] == 'debian' && node['platform_version'] == '15.04'
       return '5.6' if node['platform_family'] == 'debian' && node['platform_version'] == '15.10'
+      return '5.6' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 2016
     end
   end
 end
