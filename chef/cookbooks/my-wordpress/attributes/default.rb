@@ -10,3 +10,11 @@
 default['my-wordpress']['port'] = '3306'
 default['my-wordpress']['version'] = '5.5'
 default['my-wordpress']['db_password'] = 'wp_1pass'
+
+# Attributes to override
+override['wordpress']['db']['mysql_version'] = '5.6'
+
+# default['wordpress']['db']['root_password'] = 'my_root_password'
+# default['wordpress']['db']['instance_name'] = 'default'
+# default['wordpress']['db']['name'] = "wordpressdb"
+# default['wordpress']['db']['user'] = "wordpressuser"
