@@ -9,9 +9,32 @@
       "Description" : "Wordpress EC2 instance type",
       "Type" : "String",
       "Default" : "t2.small",
-      "AllowedValues" : [ "t2.nano", "t2.micro", "t2.small", "t2.medium"]
-,
+      "AllowedValues" : [ "t2.nano", "t2.micro", "t2.small", "t2.medium"],
       "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+
+    "WPUser": {
+      "Default": "wpuser",
+      "Description" : "Username to set the for the wordpress admin.",
+      "Type": "String"
+    },
+
+    "WPPassword": {
+      "Default": "wp_1pass",
+      "Description" : "Password to set the for the wordpress admin.",
+      "Type": "String"
+    },
+
+    "DBUser": {
+      "Default": "wpuser",
+      "Description" : "Username to set the for the db.",
+      "Type": "String"
+    },
+
+    "DBPassword": {
+      "Default": "wp_1pass",
+      "Description" : "Password to set the for the db.",
+      "Type": "String"
     },
     
     "SSHLocation" : {
@@ -212,7 +235,6 @@
       }
     },
 
-
     "WordpressInstance" : {
       "Type" : "AWS::EC2::Instance",
       "DependsOn" : "AttachGateway",
@@ -274,6 +296,20 @@
             "EOF\n",
             "chmod 755 /root/git-setup.sh\n",
             "/root/git-setup.sh > /tmp/git-setup.log 2>&1 || error_exit 'Failed to setup git.'\n",
+
+            "# Node attributes to be seeded during first run\n",
+            "cat > /root/roles.json << EOF\n",
+            "{\n",
+            "  \"run_list\": [\"my-wordpress\"", "],\n",
+            "  \"cloud\": {\n",
+            "    \"db_user\": \"", {"Ref" : "WPUser"} , "\", \n",
+            "    \"db_user\": \"", {"Ref" : "DBUser"} , "\", \n",
+            "    \"db_password\": \"", {"Ref" : "WPPassword"} , "\", \n",
+            "    \"db_password\": \"", {"Ref" : "DBPassword"} , "\", \n",
+            "    \"region_from_template\": \"", {"Ref" : "AWS::Region"} , "\" \n",
+            "  } \n",
+            "}\n",
+            "EOF\n",
 
             "/opt/aws/bin/cfn-signal -e $? ",
             "         --stack ", { "Ref" : "AWS::StackName" },
