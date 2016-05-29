@@ -222,7 +222,6 @@
           "config" : {
             "packages" : {
               "yum" : {
-                "httpd"             : [],
                 "git"               : [],
                 "subversion"        : []
               }

@@ -1,2 +1,0 @@
-usar: define( 'WP_CONTENT_DIR', realpath( __DIR__ . '/wp-content' ) );
-
