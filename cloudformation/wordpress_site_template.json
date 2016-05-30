@@ -249,9 +249,16 @@
         "GroupDescription" : "Enable SSH access via port 22",
         "SecurityGroupIngress" : [
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : { "Ref" : "SSHLocation"}},
-          {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : { "Ref" : "AllowHTTP"}},
-          {"IpProtocol" : "tcp", "FromPort": "80", "ToPort": "80", "SourceSecurityGroupId": { "Ref" : "InstanceSecurityGroup" }}
+          {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : { "Ref" : "AllowHTTP"}}
          ]
+      }
+    },
+
+    "InstanceSecurityGroupIngress" : {
+      "Type" : "AWS::EC2::SecurityGroupIngress",
+      "Properties" : {
+        "GroupId": { "Ref": "InstanceSecurityGroup" },
+        "IpProtocol": "tcp", "FromPort": "0", "ToPort": "65535", "SourceSecurityGroupId": { "Ref": "InstanceSecurityGroup" }
       }
     },
 
