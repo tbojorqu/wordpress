@@ -9,11 +9,15 @@
 
 include_recipe "wordpress"
 
-# # Install mysql
-# mysql_service 'wordpress' do
-# 	port node['my-wordpress']['port']
-# 	version node['my-wordpress']['version']
-# 	initial_root_password node['my-wordpress']['db_password']
-# 	action [:create, :start]
-# end
+# Update wordpress.conf http file with server and alias name
+# This should be done by overriding variables
+
+# Restart httpd
+execute "service httpd restart" do
+	user 'root'
+	group 'root'
+	action :run
+end
+
+# Run the wp-admin automatically
 
