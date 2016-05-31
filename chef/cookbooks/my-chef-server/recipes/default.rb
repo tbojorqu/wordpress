@@ -15,14 +15,14 @@ execute "Download and install chef" do
 	action :run
 end
 
-# Update chef-server.rb
-template "/etc/opscode/chef-server.rb" do
-	source "chef-server.erb"
-	owner 'root'
-	group 'root'
-	mode 00640
-	action :create
-end
+# # Update chef-server.rb
+# template "/etc/opscode/chef-server.rb" do
+# 	source "chef-server.erb"
+# 	owner 'root'
+# 	group 'root'
+# 	mode 00640
+# 	action :create
+# end
 
 # Reconfigure the chef server
 execute "reconfigure chef server" do
