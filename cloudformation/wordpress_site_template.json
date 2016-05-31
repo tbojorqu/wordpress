@@ -421,7 +421,7 @@
           "{\n",
           "  \"run_list\": [\"my-wordpress\"", "],\n",
           "  \"cloud\": {\n",
-          "    \"chef_server\": \"", { "Fn::GetAtt" : ["ChefInstance", "PublicIp"] } , "\", \n",
+          "    \"chef_server\": \"", {"Ref" : "ChefIPAddress"} , "\", \n",
           "    \"wp_user\": \"", {"Ref" : "WPUser"} , "\", \n",
           "    \"db_user\": \"", {"Ref" : "DBUser"} , "\", \n",
           "    \"wp_password\": \"", {"Ref" : "WPPassword"} , "\", \n",
