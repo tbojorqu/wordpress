@@ -16,3 +16,6 @@ default['my-chef-server']['short_org'] = 'tbojorquez'
 default['my-chef-server']['full_org'] = 'Tim Bojorquez Chef Org'
 default['my-chef-server']['private_key'] = '/root/tbojorquez-chef.pem'
 default['my-chef-server']['validator_key'] = '/root/tbojorquez-validator.pem'
+
+# Override attributes
+override['private_chef']['nginx']['server_name'] = node['hostname']

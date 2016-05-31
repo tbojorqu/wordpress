@@ -329,7 +329,6 @@
             "{\n",
             "  \"run_list\": [\"my-chef-server\"", "],\n",
             "  \"cloud\": {\n",
-            "    \"chef_server\": \"", {"Ref" : "ChefIPAddress"} , "\", \n",
             "    \"wp_user\": \"", {"Ref" : "WPUser"} , "\", \n",
             "    \"db_user\": \"", {"Ref" : "DBUser"} , "\", \n",
             "    \"wp_password\": \"", {"Ref" : "WPPassword"} , "\", \n",
