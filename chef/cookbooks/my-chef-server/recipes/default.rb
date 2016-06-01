@@ -39,6 +39,7 @@ execute "create admin account" do
 	user 'root'
 	group 'root'
 	action :run
+	not_if "chef-server-ctl user-list | grep #{node['my-chef-server']['user_name']}"
 end
 
 # Create a chef organization
@@ -47,6 +48,7 @@ execute "create a chef org" do
 	user 'root'
 	group 'root'
 	action :run
+	not_if "chef-server-ctl org-list | grep #{node['my-chef-server']['short_org']}"
 end
 
 # Add the manager to the chef server
