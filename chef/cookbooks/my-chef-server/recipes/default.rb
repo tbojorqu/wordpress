@@ -80,7 +80,7 @@ end
 
 # Copy cert files to /tmp
 %w{tbojorquez-chef.pem tbojorquez-validator.pem}.each do |cert|
-	execute "/root/#{cert} /tmp/#{cert}" do
+	execute "cp/root/#{cert} /tmp/#{cert}" do
 		user 'root'
 		group 'root'
 		action :run

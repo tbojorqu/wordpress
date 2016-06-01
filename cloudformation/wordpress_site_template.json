@@ -329,7 +329,7 @@
             "INSTANCEID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`\n",
             "NODE_NAME=\"",{ "Ref": "AWS::StackName" }, "-$INSTANCEID", "\"\n",
 
-            "CHEF_SERVER=\"", { "Fn::GetAtt": [ "ChefInstance", "PrivateIp" ]}, "\"\n",
+            "CHEF_SERVER=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`\n",
 
             "mkdir -p /root/.chef\n",
 
@@ -339,7 +339,7 @@
             "log_location     \"/var/log/chef-client.log\"\n",
             "ssl_verify_mode :verify_none\n",
             "node_name 'tbojorquez'\n",
-            "client_key \"/root/tbojorquez-chef.pem\"",
+            "client_key \"/root/tbojorquez-chef.pem\"\n",
             "validation_client_name  'tbojorquez-validator'\n",
             "validation_key          \"/root/tbojorquez-validator.pem\"\n",
             "chef_server_url         \"https://$CHEF_SERVER/organizations/tbojorquez\"\n",
@@ -476,7 +476,7 @@
           "mkdir -p /etc/chef\n",
 
           "# Get chef certs\n",
-          "scp -i /root/.ssh/key.pem ec2-user@$CHEF_SERVER:/tmp/tbojorquez-validator.pem /etc/chef\n",
+          "scp -o StrictHostKeyChecking=no -i /root/.ssh/key.pem ec2-user@$CHEF_SERVER:/tmp/tbojorquez-validator.pem /etc/chef\n",
 
           "cat > /etc/chef/client.rb << EOF\n",
           "current_dir = File.dirname(__FILE__)\n",
@@ -506,7 +506,7 @@
           "EOF\n",
 
           "# Chef firstrun\n",
-          "#chef-client -j /etc/chef/roles.json -N $NODE_NAME 2>&1 || error_exit 'Failed to initialize host via chef client' \n",
+          "#chef-client -j /etc/chef/roles.json -N $NODE_NAME > /var/log/chef-client.log 2>&1 || error_exit 'Failed to initialize wordpress via chef client' \n",
 
           "/opt/aws/bin/cfn-signal -e $? ",
           "         --stack ", { "Ref" : "AWS::StackName" },
@@ -516,7 +516,7 @@
       },
       "CreationPolicy" : {
         "ResourceSignal" : {
-          "Timeout" : "PT15M"
+          "Timeout" : "PT10M"
         }
       }
     }
