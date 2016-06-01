@@ -13,6 +13,7 @@ execute "Download and install chef" do
 	user 'root'
 	group 'root'
 	action :run
+	not_if "rpm -qa | grep chef-server-core"
 end
 
 # # Update chef-server.rb
@@ -46,4 +47,51 @@ execute "create a chef org" do
 	user 'root'
 	group 'root'
 	action :run
+end
+
+# Add the manager to the chef server
+execute "Add manager to the chef server" do
+	command "chef-server-ctl install chef-manage"
+	user 'root'
+	group 'root'
+	action :run
+	not_if "rpm -qa | grep chef-manage"
+end
+
+# Run the reconfigure again on the chef server
+execute "reconfigure chef server" do
+	command "chef-server-ctl reconfigure"
+	user 'root'
+	group 'root'
+	action :run
+	not_if "rpm -qa | grep chef-manage"
+end
+
+# Configure the manager on the chef server
+execute "Add manager to the chef server" do
+	command "chef-manage-ctl reconfigure --accept-license"
+	user 'root'
+	group 'root'
+	action :run
+	not_if "rpm -qa | grep chef-manage"
+end
+
+# Copy cert files to /tmp
+%w{tbojorquez-chef.pem tbojorquez-validator.pem}.each do |cert|
+	execute "/root/#{cert} /tmp/#{cert}" do
+		owner 'root'
+		group 'root'
+		action :run
+		not_if { ::File.exists?("/tmp/#{cert}") }
+	end
+end
+
+# Upload cookbooks
+%w{chef_handler windows 7-zip build-essential chef-sugar xml yum yum-epel iis yum-mysql-community rbac smf mysql php openssl apache2 apt postgresql database mariadb mysql2_chef_gem tar compat_resource rsyslog bluepill ohai packagecloud runit nginx php-fpm selinux wordpress my-wordpress}.each do |cookbook|
+	execute "knife cookbook upload #{cookbook}" do
+		cwd '/cookbooks'
+		owner 'root'
+		group 'root'
+		action :run
+	end
 end
