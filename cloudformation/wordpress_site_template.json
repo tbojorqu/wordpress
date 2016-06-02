@@ -326,9 +326,6 @@
             "chmod 755 /root/git-setup.sh\n",
             "/root/git-setup.sh > /tmp/git-setup.log 2>&1 || error_exit 'Failed to setup git.'\n",
 
-            "INSTANCEID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`\n",
-            "NODE_NAME=\"",{ "Ref": "AWS::StackName" }, "-$INSTANCEID", "\"\n",
-
             "CHEF_SERVER=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`\n",
 
             "mkdir -p /root/.chef\n",
@@ -363,7 +360,13 @@
             "EOF\n",
 
             "# Run chef-solo to install the chef-server\n",
-            "#chef-client -z -j /root/roles.json > /var/log/chef-client.log 2>&1 || error_exit 'Chef run failed.'\n",
+            "cat <<'EOF' >> /root/run-chef.sh\n",
+            "#!/bin/bash\n",
+            "cd /root\n",
+            "chef-client -z -j /root/roles.json\n",
+            "EOF\n",
+            "chmod 755 /root/run-chef.sh\n",
+            "/root/run-chef.sh > /var/log/chef-client.log 2>&1 || error_exit 'Chef run failed setting up the chef-server.'\n",
 
             "/opt/aws/bin/cfn-signal -e $? ",
             "         --stack ", { "Ref" : "AWS::StackName" },
@@ -468,9 +471,6 @@
           "EOF\n",
           "chmod 600 /root/.ssh/key.pem\n",
 
-          "INSTANCEID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`\n",
-          "NODE_NAME=\"",{ "Ref": "AWS::StackName" }, "-$INSTANCEID", "\"\n",
-
           "CHEF_SERVER=\"", { "Fn::GetAtt": [ "ChefInstance", "PrivateIp" ]}, "\"\n",
 
           "mkdir -p /etc/chef\n",
@@ -483,7 +483,7 @@
           "log_level       :info\n",
           "log_location     \"/var/log/chef-client.log\"\n",
           "ssl_verify_mode :verify_none\n",
-          "node_name \"", "$NODE_NAME", "\"\n",
+          "node_name \"wordpress\"\n",
           "validation_client_name  'tbojorquez-validator'\n",
           "validation_key          \"#{current_dir}/tbojorquez-validator.pem\"\n",
           "chef_server_url         \"https://$CHEF_SERVER/organizations/tbojorquez\"\n",
@@ -505,8 +505,14 @@
           "}\n",
           "EOF\n",
 
-          "# Chef firstrun\n",
-          "#chef-client -j /etc/chef/roles.json -N $NODE_NAME > /var/log/chef-client.log 2>&1 || error_exit 'Failed to initialize wordpress via chef client' \n",
+          "# Run chef-client to install wordpress\n",
+          "cat <<'EOF' >> /root/run-chef.sh\n",
+          "#!/bin/bash\n",
+          "cd /root\n",
+          "chef-client -j /etc/chef/roles.json -N wordpress\n",
+          "EOF\n",
+          "chmod 755 /root/run-chef.sh\n",
+          "/root/run-chef.sh > /var/log/chef-client.log 2>&1 || error_exit 'Failed to initialize wordpress via chef client'\n",
 
           "/opt/aws/bin/cfn-signal -e $? ",
           "         --stack ", { "Ref" : "AWS::StackName" },
