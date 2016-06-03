@@ -25,15 +25,9 @@
       "Type": "String"
     },
 
-    "DBUser": {
-      "Default": "wpuser",
-      "Description" : "Username to set the for the db.",
-      "Type": "String"
-    },
-
-    "DBPassword": {
-      "Default": "wp_1pass",
-      "Description" : "Password to set the for the db.",
+    "WPEmail": {
+      "Default": "user@host.com",
+      "Description" : "Email to use the for the wordpress admin site.",
       "Type": "String"
     },
     
@@ -226,24 +220,6 @@
       }
     },
 
-    "WordpressIPAddress" : {
-      "Type" : "AWS::EC2::EIP",
-      "DependsOn" : "AttachGateway",
-      "Properties" : {
-        "Domain" : "vpc",
-        "InstanceId" : { "Ref" : "WordpressInstance" }
-      }
-    },
-
-    "ChefIPAddress" : {
-      "Type" : "AWS::EC2::EIP",
-      "DependsOn" : "AttachGateway",
-      "Properties" : {
-        "Domain" : "vpc",
-        "InstanceId" : { "Ref" : "ChefInstance" }
-      }
-    },
-
     "InstanceSecurityGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
@@ -351,9 +327,7 @@
             "  \"run_list\": [\"my-chef-server\"", "],\n",
             "  \"cloud\": {\n",
             "    \"wp_user\": \"", {"Ref" : "WPUser"} , "\", \n",
-            "    \"db_user\": \"", {"Ref" : "DBUser"} , "\", \n",
             "    \"wp_password\": \"", {"Ref" : "WPPassword"} , "\", \n",
-            "    \"db_password\": \"", {"Ref" : "DBPassword"} , "\", \n",
             "    \"region_from_template\": \"", {"Ref" : "AWS::Region"} , "\" \n",
             "  } \n",
             "}\n",
@@ -473,6 +447,8 @@
 
           "CHEF_SERVER=\"", { "Fn::GetAtt": [ "ChefInstance", "PrivateIp" ]}, "\"\n",
 
+          "WP_SERVER=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`\n",
+
           "mkdir -p /etc/chef\n",
 
           "# Get chef certs\n",
@@ -497,9 +473,9 @@
           "  \"cloud\": {\n",
           "    \"chef_server\": \"", { "Fn::GetAtt": [ "ChefInstance", "PrivateIp" ]} , "\", \n",
           "    \"wp_user\": \"", {"Ref" : "WPUser"} , "\", \n",
-          "    \"db_user\": \"", {"Ref" : "DBUser"} , "\", \n",
           "    \"wp_password\": \"", {"Ref" : "WPPassword"} , "\", \n",
-          "    \"db_password\": \"", {"Ref" : "DBPassword"} , "\", \n",
+          "    \"wp_email\": \"", {"Ref" : "WPEmail"} , "\", \n",
+          "    \"wp_server\": \"$WP_SERVER\", \n",
           "    \"region_from_template\": \"", {"Ref" : "AWS::Region"} , "\" \n",
           "  } \n",
           "}\n",

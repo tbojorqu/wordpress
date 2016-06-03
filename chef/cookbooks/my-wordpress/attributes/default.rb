@@ -12,6 +12,8 @@ default['my-wordpress']['wp_password'] = node['cloud']['wp_password']
 default['my-wordpress']['private_key'] = 'tbojorquez-chef.pem'
 default['my-wordpress']['validator_key'] = 'tbojorquez-validator.pem'
 default['my-wordpress']['short_org'] = 'tbojorquez'
+default['my-wordpress']['server'] = node['cloud']['wp_server']
+default['my-wordpress']['email'] = node['cloud']['wp_email']
 
 # Attributes to override
 override['wordpress']['db']['mysql_version'] = '5.5'
