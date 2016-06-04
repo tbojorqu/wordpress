@@ -36,7 +36,7 @@ end
 
 # Update wp-admin
 execute "update wp-admin" do
-	command "wp core install --path=\"/var/www/wordpress\" --url=\"your_domain_name\"  --title=\"Rean Cloud Demo\" --admin_user=\"#{node['my-wordpress']['wp_user']}\" --admin_password=\"#{node['my-wordpress']['wp_password']}\" --admin_email=\"#{node['my-wordpress']['email']}\""
+	command "wp core install --path=\"/var/www/wordpress\" --url=\"#{node['my-wordpress']['server']}\"  --title=\"Rean Cloud Demo\" --admin_user=\"#{node['my-wordpress']['wp_user']}\" --admin_password=\"#{node['my-wordpress']['wp_password']}\" --admin_email=\"#{node['my-wordpress']['email']}\""
 	user 'ec2-user'
 	group 'ec2-user'
 	action :run
