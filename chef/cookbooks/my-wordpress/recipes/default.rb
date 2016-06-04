@@ -9,15 +9,6 @@
 
 include_recipe "wordpress"
 
-# Update wordpress.conf http file with server and alias name
-# This should be done by overriding variables
-
-# Restart httpd
-execute "service httpd restart" do
-	user 'root'
-	group 'root'
-	action :run
-end
 
 # Download the wp-cli
 execute "download wp-cli" do
